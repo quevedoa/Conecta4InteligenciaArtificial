@@ -141,37 +141,17 @@ function gameOver() {
 function mouseClicked() {
 
   col = whichCol(mouseX);
-  a = amount[col];
+  a = amount[col]
   lastMove = [a, col]
 
   xhttp.open("GET", "grid"+"?"+"lastMove="+lastMove);
   xhttp.send();
 
-  oppResponse(a,col)
-  // if (a <= 5) { // Checa si la columna ya se lleno
-  //   // print(lastMove)
-  //   if (winner == 0) {
-  //     if (currentColor[0] == 255) {
-  //       currentColor[0] = 0
-  //       currentColor[1] = 255
-  //     } else {
-  //       currentColor[0] = 255
-  //       currentColor[1] = 0
-  //     }
+  oppResponse(col);
+  
+  rand = Math.floor((Math.random() * 6));
+  // oppResponse(rand)
 
-  //     grid[nRows - a - 1][col] = turn
-  //     lastMove = [a, col]
-  //     if (turn == 1) {
-  //       turn = 0
-  //     } else {
-  //       turn = 1
-  //     }
-  //     amount[col] = amount[col] + 1
-
-  //   } else {
-  //     gameOver()
-  //   }
-  // }
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       var fullResp = this.responseText;
@@ -180,10 +160,10 @@ function mouseClicked() {
 
       print(this.responseText)
 
-      r = parseInt(resp[0])
-      c = parseInt(resp[1])
+      c = parseInt(resp[0])
+      console.log(c + "GOLA")
 
-      oppResponse(r,c)
+      oppResponse(c)
     }
   }
 }
@@ -223,7 +203,9 @@ function xPosTop(posX) {
   return pos
 }
 
-function oppResponse(row, col) {
+function oppResponse(col) {
+
+  row = amount[col]
 
   if (row <= 5) { // Checa si la columna ya se lleno
     // print(lastMove)
