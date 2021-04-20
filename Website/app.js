@@ -12,13 +12,14 @@ app.get('/', (req, res) => {
 
 app.get('/grid', (req, res) => {
     matrizJuego = String(req.query.lastMove)
+    profundidad = 2
     
     console.log(matrizJuego)
 
     const p = new Promise(function executor(resolve, reject){
         //escribirlo en un txts
         
-        var posicion = `(setq tablero ${matrizJuego})\n(setq rtrn (abp A 4 0 minf inf tablero 1))\n(setq rtrn (list "heuristica:" (first rtrn) "columna:" (second rtrn)))\n(with-open-file (str "./lisp/resp.txt" \n         :direction :output \n         :if-exists :supersede \n         :if-does-not-exist :create) \n(format str (tostr rtrn))\n)`
+        var posicion = `(setq tablero ${matrizJuego})\n (setq rtrn (abp B ${profundidad} 0 minf inf tablero 1))\n (setq rtrn (list "heuristica:" (first rtrn) "columna:" (second rtrn)))\n (with-open-file (str "./lisp/resp.txt" \n         :direction :output \n         :if-exists :supersede \n         :if-does-not-exist :create) \n(format str (tostr rtrn)) \n)`
         
         try {
             const data = fs.writeFileSync('./lisp/query.txt', posicion, { flag: 'w+' })
@@ -40,17 +41,25 @@ app.get('/grid', (req, res) => {
             if (stderr) {
                 console.log(`stderr: ${stderr}`);
             }
+            fs.readFile('./lisp/resp.txt', 'utf8', function (err, data) {
+                if (err) {
+                    return console.log(err);
+                }
+                arrPos = data[data.length-2];
+                console.log(`Posicion Respuesta: ${arrPos}`);
+                res.send(arrPos);
+            });
             console.log(`stdout: lisp ejecutado`);
         });
     }, function(error) {console.log("error then1")}).then(function(value) {
-        fs.readFile('./lisp/resp.txt', 'utf8', function (err, data) {
-            if (err) {
-                return console.log(err);
-            }
-            arrPos = data[data.length-2];
-            console.log(`Posicion Respuesta: ${arrPos}`);
-            res.send(arrPos);
-        });
+        // fs.readFile('./lisp/resp.txt', 'utf8', function (err, data) {
+        //     if (err) {
+        //         return console.log(err);
+        //     }
+        //     arrPos = data[data.length-2];
+        //     console.log(`Posicion Respuesta: ${arrPos}`);
+        //     res.send(arrPos);
+        // });
     }, 1000);
 });
 

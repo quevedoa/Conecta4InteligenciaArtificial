@@ -6,6 +6,13 @@ turn = 0
 lastMove = [-1,-1]
 winner = 0
 
+// 0: PvC, 1: PvP, 2: CvC
+gameMode = 0
+
+if (gameMode == 0) {
+  fichaPlayer = 0; // Puede ser 0 o 1
+}
+
 nRows = 6
 nCols = 7
 
@@ -41,8 +48,10 @@ function draw() {
   drawBoard()
 
   fill(turnColor)
-  circle(xPosTop(mouseX), rad, rad * 2)
 
+  if ((gameMode == 0 && turn == fichaPlayer) || gameMode == 1) {
+    circle(xPosTop(mouseX), rad, rad * 2)
+  }
 }
 
 function drawBoard() {
@@ -144,7 +153,7 @@ function gameOver() {
 function mouseClicked() {
   col = whichCol(mouseX);
   a = amount[col]
-  if (a <= 5) {
+  if (a <= 5 && turn == fichaPlayer) {
     lastMove = [a, col]
   
     oppResponse(col);
@@ -165,10 +174,8 @@ function mouseClicked() {
         stringMatrizJuego = stringMatrizJuego + ") "
     }
     stringMatrizJuego = stringMatrizJuego + ")"
-    // stringMatrizJuego = stringMatrizJuego.replaceAll('2','-1').replaceAll(' 0','')
-    stringMatrizJuego = stringMatrizJuego.replaceAll(' 0','')
-  
-    // xhttp.open("GET", "grid"+"?"+"lastMove="+stringMatrizJuego);
+    stringMatrizJuego = stringMatrizJuego.replaceAll('2','-1').replaceAll(' 0','')
+ 
     xhttp.open("GET", "grid"+"?"+"lastMove="+stringMatrizJuego);
     xhttp.send();
   
