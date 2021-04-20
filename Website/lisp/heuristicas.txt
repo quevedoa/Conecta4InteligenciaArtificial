@@ -1,0 +1,81 @@
+;(heuristica1 (convierteMat tablero))
+;;regresa el valor
+;; candidatasA - candidatasB
+;; donde candidatasA es la cantidad de posiciones donde pueda ganar A, 
+;; y analogo para B
+(defun heuristica1 (matriz)
+	(let ((resp 0) (lim 3))
+	(loop for j from 0 to (- columnas 1) do
+	(loop for i from 0 to (- filas 1) do 
+		;;vertical (hacia abajo)
+		(if (and (validof i lim) (/= fichaB (aref matriz i j)) (/= fichaB (aref matriz (+ i 1) j)) (/= fichaB (aref matriz (+ i 2) j)) (/= fichaB (aref matriz (+ i 3) j)))
+			(incf resp))
+		(if (and (validof i lim) (/= fichaA (aref matriz i j)) (/= fichaA (aref matriz (+ i 1) j)) (/= fichaA (aref matriz (+ i 2) j)) (/= fichaA (aref matriz (+ i 3) j)))
+			(decf resp))
+		;;horizontal (hacia la derecha)
+		(if (and (validoc j 1 lim) (/= fichaB (aref matriz i j)) (/= fichaB (aref matriz i (+ j 1))) (/= fichaB (aref matriz i (+ j 2))) (/= fichaB (aref matriz i (+ j 3))))
+			(incf resp))
+		(if (and (validoc j 1 lim) (/= fichaA (aref matriz i j)) (/= fichaA (aref matriz i (+ j 1))) (/= fichaA (aref matriz i (+ j 2))) (/= fichaA (aref matriz i (+ j 3))))
+			(decf resp))
+		;;diagonal1 (hacia abajo y la derecha)
+		(if (and (validof i lim) (validoc j 1 lim) (/= fichaB (aref matriz i j)) (/= fichaB (aref matriz (+ i 1) (+ j 1))) (/= fichaB (aref matriz (+ i 2) (+ j 2))) (/= fichaB (aref matriz (+ i 3) (+ j 3))))
+			(incf resp))
+		(if (and (validof i lim) (validoc j 1 lim) (/= fichaA (aref matriz i j)) (/= fichaA (aref matriz (+ i 1) (+ j 1))) (/= fichaA (aref matriz (+ i 2) (+ j 2))) (/= fichaA (aref matriz (+ i 3) (+ j 3))))
+			(decf resp))
+		;;diagonal2 (hacia abajo y la izq)
+		(if (and (validof i lim) (validoc j -1 lim) (/= fichaB (aref matriz i j)) (/= fichaB (aref matriz (+ i 1) (- j 1))) (/= fichaB (aref matriz (+ i 2) (- j 2))) (/= fichaB (aref matriz (+ i 3) (- j 3))))
+			(incf resp))
+		(if (and (validof i lim) (validoc j -1 lim) (/= fichaA (aref matriz i j)) (/= fichaA (aref matriz (+ i 1) (- j 1))) (/= fichaA (aref matriz (+ i 2) (- j 2))) (/= fichaA (aref matriz (+ i 3) (- j 3))))
+			(decf resp))
+	) 
+	)
+	resp
+	)
+)
+
+(defun cuantasIguales (tam matriz)
+	(let ((lim (- tam 1)) (resp 0))
+	(loop for j from 0 to (- columnas 1) do
+	(loop for i from 0 to (- filas 1) do 
+		;;vertical (hacia abajo)
+		(if (and (validof i lim) (iguales lim fichaA matriz i 1 j 0)) 
+			(incf resp))
+		(if (and (validof i lim) (iguales lim fichaB matriz i 1 j 0))
+			(decf resp))
+
+		;;horizontal (hacia la derecha)
+		(if (and (validoc j 1 lim) (iguales lim fichaA matriz i 0 j 1))
+			(incf resp))
+		(if (and (validoc j 1 lim) (iguales lim fichaB matriz i 0 j 1))
+			(decf resp))
+		
+		;;diagonal1 (hacia abajo y la derecha)
+		(if (and (validof i lim) (validoc j 1 lim) (iguales lim fichaA matriz i 1 j 1) )
+			(incf resp))
+		(if (and (validof i lim) (validoc j 1 lim) (iguales lim fichaB matriz i 1 j 1) )
+			(decf resp))
+		
+		;;diagonal2 (hacia abajo y la izq)
+		(if (and (validof i lim) (validoc j -1 lim) (iguales lim fichaA matriz i 1 j -1) )
+			(incf resp))
+		(if (and (validof i lim) (validoc j -1 lim) (iguales lim fichaB matriz i 1 j -1))
+			(decf resp))
+	) 
+	)
+	resp
+	)
+)
+
+(defun heuristica2 (matriz)
+	(+ (cuantasIguales 2 matriz) (cuantasIguales 3 matriz) (/ (cuantasIguales 1 matriz) 4))
+)
+
+
+;;en la heuristica no checamos si ya acabo el juego, porque abp siempre lo checa
+;;antes de cualquier mov
+(defun heuristica (matriz num)
+	(cond
+		((eq num 1) (heuristica1 matriz))
+		(T (heuristica2 matriz))
+	)
+)

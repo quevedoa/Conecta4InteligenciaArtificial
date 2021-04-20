@@ -15,13 +15,16 @@ amount = [0, 0, 0, 0, 0, 0, 0]
 currentColor = [255, 0]
 
 grid = []
+matrizJuego = [] // String con 42 caracteres, Se divide en 7 partes, cada una una columna, el orden de elementos va de arriba hacia abajo
 for (i = 0; i < nRows; i++) {
   row = []
   for (j = 0; j < nCols; j++) {
     row.push(-1)
+    matrizJuego.push(0)
   }
   grid.push(row)
 }
+
 
 function setup() {
   createCanvas(canvasWidth, canvasHeight);
@@ -139,31 +142,52 @@ function gameOver() {
 }
 
 function mouseClicked() {
-
   col = whichCol(mouseX);
   a = amount[col]
-  lastMove = [a, col]
-
-  xhttp.open("GET", "grid"+"?"+"lastMove="+lastMove);
-  xhttp.send();
-
-  oppResponse(col);
+  if (a <= 5) {
+    lastMove = [a, col]
   
-  rand = Math.floor((Math.random() * 6));
-  // oppResponse(rand)
-
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      var fullResp = this.responseText;
-      var resp = fullResp.replace('[','').replace(']','').replaceAll('"','').split(',');
-
-
-      print(this.responseText)
-
-      c = parseInt(resp[0])
-      console.log(c + "GOLA")
-
-      oppResponse(c)
+    oppResponse(col);
+  
+    // xhttp.open("GET", "grid"+"?"+"lastMove="+lastMove);
+  
+    mat = ""
+    for (i = 0; i < matrizJuego.length; i++) {
+      mat = mat + matrizJuego[i]
+    }
+  
+    stringMatrizJuego = "'( "
+    for (i = 0; i < 7; i++) {
+        stringMatrizJuego = stringMatrizJuego + "("
+        for (j = 0; j < 6; j++) {
+            stringMatrizJuego = stringMatrizJuego + " " + mat[6*i+j]
+        }
+        stringMatrizJuego = stringMatrizJuego + ") "
+    }
+    stringMatrizJuego = stringMatrizJuego + ")"
+    // stringMatrizJuego = stringMatrizJuego.replaceAll('2','-1').replaceAll(' 0','')
+    stringMatrizJuego = stringMatrizJuego.replaceAll(' 0','')
+  
+    // xhttp.open("GET", "grid"+"?"+"lastMove="+stringMatrizJuego);
+    xhttp.open("GET", "grid"+"?"+"lastMove="+stringMatrizJuego);
+    xhttp.send();
+  
+    rand = Math.floor((Math.random() * 6));
+    // oppResponse(rand)
+  
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        var fullResp = this.responseText;
+        var resp = fullResp.replace('[','').replace(']','').replaceAll('"','').split(',');
+  
+  
+        print(this.responseText)
+  
+        c = parseInt(resp[0])
+        console.log(c + "GOLA")
+  
+        oppResponse(c)
+      }
     }
   }
 }
@@ -208,7 +232,7 @@ function oppResponse(col) {
   row = amount[col]
 
   if (row <= 5) { // Checa si la columna ya se lleno
-    // print(lastMove)
+    print("LLEGUE" + col)
     if (winner == 0) {
       if (currentColor[0] == 255) {
         currentColor[0] = 0
@@ -219,6 +243,17 @@ function oppResponse(col) {
       }
 
       grid[nRows - row - 1][col] = turn
+
+      newCol = col*6
+      newRow = (nRows-1) - row
+
+      if (turn == 0) {
+        newTurn = 1
+      } else {
+        newTurn = 2
+      }
+      matrizJuego[newCol+newRow] = newTurn
+
       lastMove = [row, col]
       if (turn == 1) {
         turn = 0

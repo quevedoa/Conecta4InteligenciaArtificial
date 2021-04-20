@@ -1,0 +1,52 @@
+(defun abp(jug prof profActual  alfa beta tablero h) 
+	
+	(let ( (mov -1) (resp (if  (eq jug A) (* 10 minf) (* 10 inf))) (valorJugada 0))  
+	;;si alguien ya gana en esta posicion, regresamos al ganador
+	;(print (list profActual tablero))
+	(setq valorJugada (juegoAcabo (convierteMat tablero)))
+	;(print valorJugada)
+	(if (eq valorJugada A) (return-from abp (list inf -1)) (if (eq valorJugada B) (return-from abp (list minf -1))))
+
+	;;si ya llegamos al limite de profundidad, regresamos el valor de la heuristica
+	(if  (eq prof profActual) (return-from abp (list (heuristica (convierteMat tablero) h) -1)))
+
+	;; sino, evaluamos ada uno de los movimientos
+	(loop for c in '(3 2 4 1 5 0 6)
+	do  
+		(if  (< (length (nth c tablero)) filas) 
+			(if (eq jug A) 
+				(progn 
+					;(print (list profActual c valorJugada resp alfa beta))
+					(setq valorJugada (car (abp B prof (+ 1 profActual) alfa beta (agregaFichaCol c fichaA tablero) h)))
+					;(print (list jug c valorJugada resp alfa beta))
+					(if  (> valorJugada resp) (setq mov c resp valorJugada))
+					(setq alfa (max alfa resp))
+					(if (>= alfa beta) (return-from abp (list resp mov)))
+					;(print (list jug c valorJugada resp alfa beta))
+				)
+				(progn 
+					;(print (list jug c valorJugada resp alfa beta))
+					(setq valorJugada (car (abp A prof (+ 1 profActual) alfa beta (agregaFichaCol c fichaB tablero) h)))
+					;(print (list jug c valorJugada resp alfa beta))
+					(if  (< valorJugada resp) (setq mov c resp valorJugada))
+					(setq beta (min beta resp))
+					(if (>= alfa beta) (return-from abp (list resp mov)))
+					;(print (list jug c valorJugada resp alfa beta))
+				)	
+			)
+		)
+	)
+	(list resp mov)
+	)
+)
+
+;(abp A 4 0 minf inf tablero 1)
+;(abp B 4 0 minf inf tablero 1)
+;(abp A 2 0 minf inf tablero 1)
+; (abp A 1 0 minf inf tablero 1)
+
+
+;(agregaFichaCol 3 fichaB tablero)
+;(agregaFichaCol 3 fichaA tablero)
+;(abp A 2 0 minf inf tablero 1)
+;(agrega c ficha tablero)

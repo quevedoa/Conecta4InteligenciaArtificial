@@ -1,1 +1,1 @@
-1,6
+(setq tablero '( ( 1) () ( -1 -1) ( -1 -1 1) ( 1) ( 1) ( 1) )) (abp B 4 0 minf inf tablero 1)

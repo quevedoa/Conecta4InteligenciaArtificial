@@ -1,0 +1,85 @@
+(setq filas 6 columnas 7 fichaA 1 fichaB -1 neutra 0 A 1 B 2 nadie 0 inf 10000000 minf -10000000)
+
+;esta la uso en la función abp
+;dado un tablero como lista de listas (lista de columnas), agrega la ficha en la columna c
+(defun agregaFichaCol (c ficha tablero) (append (reverse (nthcdr (- columnas c) (reverse tablero))) (list (cons ficha (nth c tablero))) (nthcdr (+ c 1) tablero)))
+
+
+
+(defun validof (i lim) (> (- filas i) lim))
+(defun validoc (j c lim) 
+	(cond 
+		((eq c 1) (> (- columnas j) lim))
+		(T (> (+ j 1) lim))
+	)
+)
+(defun iguales (lim ficha matriz i fi j fj) 
+	(eval (cons 'and (loop for k from 0 to lim  collect (= ficha (aref matriz (+ i (* fi k))  (+ j (* fj k)))))))
+)
+
+;devuelve la lista de listas que representa al tablero en forma de matriz 
+(defun convierteMat (tablero)
+	(setf matriz (make-array (list filas columnas)))
+	(loop for c from 0 to (- columnas 1)
+	do 
+		(setq len (length (nth c tablero)))
+		(loop for f from 0 to (- len 1)
+  			do 
+			(setf (aref matriz (- filas 1 f) c) (nth (- len f 1) (nth c tablero)))  
+		)
+		(loop for f from len to (- filas 1)
+			do
+			(setf (aref matriz (- filas 1 f) c) neutra)
+		)
+	)
+	matriz
+)
+
+
+(defun juegoAcabo (matriz)
+	(setq lim 3)
+	(loop for j from 0 to (- columnas 1) do
+	(loop for i from 0 to (- filas 1) do 
+		;;vertical (hacia abajo)
+		(if (and (validof i lim) (iguales lim fichaA matriz i 1 j 0)) 
+			(return-from juegoAcabo A))
+		(if (and (validof i lim) (iguales lim fichaB matriz i 1 j 0))
+			(return-from juegoAcabo B))
+
+		;;horizontal (hacia la derecha)
+		(if (and (validoc j 1 lim) (iguales lim fichaA matriz i 0 j 1))
+			(return-from juegoAcabo A))
+		(if (and (validoc j 1 lim) (iguales lim fichaB matriz i 0 j 1))
+			(return-from juegoAcabo B))
+		
+		;;diagonal1 (hacia abajo y la derecha)
+		(if (and (validof i lim) (validoc j 1 lim) (iguales lim fichaA matriz i 1 j 1) )
+			(return-from juegoAcabo A))
+		(if (and (validof i lim) (validoc j 1 lim) (iguales lim fichaB matriz i 1 j 1) )
+			(return-from juegoAcabo B))
+		
+		;;diagonal2 (hacia abajo y la izq)
+		(if (and (validof i lim) (validoc j -1 lim) (iguales lim fichaA matriz i 1 j -1) )
+			(return-from juegoAcabo A))
+		(if (and (validof i lim) (validoc j -1 lim) (iguales lim fichaB matriz i 1 j -1))
+			(return-from juegoAcabo B))
+	) 
+	)
+	nadie
+)
+
+(defun reiniciaTablero ()
+	(setq tablero (loop for k from 1 to columnas  collect nil))
+)
+
+(defun agrega (col ficha)
+	(push ficha (nth col tablero))
+)
+
+(defun tostr (lst)
+	(apply #'concatenate 'string 
+		(mapcar #'(lambda (sim) (concatenate 'string (if (numberp sim) (write-to-string sim) (string sim)) " ")) lst)
+	)
+)
+
+;(reiniciaTablero )

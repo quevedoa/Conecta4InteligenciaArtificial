@@ -1,0 +1,5 @@
+(load "./lisp/globales.txt")
+(load "./lisp/heuristicas.txt")
+(load "./lisp/alfabeta.txt")
+
+(load "./lisp/query.txt")
