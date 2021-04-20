@@ -1,5 +1,5 @@
-(setq tablero '( () () () ( 1 -1) ( -1 1 1) () () ))
- (setq rtrn (abp B 2 0 minf inf tablero 1))
+(setq tablero '( () () ( 1) ( -1 -1 -1 1) ( 1) ( 1) () ))
+ (setq rtrn (abp B 3 0 minf inf tablero 1))
  (setq rtrn (list "heuristica:" (first rtrn) "columna:" (second rtrn)))
  (with-open-file (str "./lisp/resp.txt" 
          :direction :output 

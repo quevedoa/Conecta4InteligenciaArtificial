@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
 
 app.get('/grid', (req, res) => {
     matrizJuego = String(req.query.lastMove)
-    profundidad = 2
+    profundidad = 4
     
     console.log(matrizJuego)
 

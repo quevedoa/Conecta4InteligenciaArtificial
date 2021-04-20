@@ -1,1 +1,1 @@
-heuristica: 1 columna: 4 
+heuristica: 10000000 columna: -1 
