@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<title>W3.CSS Template</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://cdn.jsdelivr.net/npm/p5@1.3.0/lib/p5.js"></script>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<style>
+body,h1,h5 {font-family: "Raleway", sans-serif}
+body, html {height: 100%}
+
+</style>
+<body bgcolor="132c33">
+
+<div class="w3-display-container w3-text-black">
+  <div id="game" class="w3-display-middle w3-jumbo">
+    <script src="board.js"></script>
+  </div>
+  <div class="w3-display-topleft w3-container w3-xlarge">
+    <p><button onclick="document.getElementById('menu').style.display='block'" class="w3-button w3-black">About Us</button></p>
+  </div>
+  <div class="w3-display-bottomleft w3-container">
+    <p>Github: <a href="https://github.com/quevedoa/Conecta4InteligenciaArtificial" target="_blank">Conecta4InteligenciaArtificial</a></p>
+  </div>
+</div>
+
+<!-- Menu Modal -->
+<div id="menu" class="w3-modal">
+  <div class="w3-modal-content w3-animate-zoom">
+    <div class="w3-container w3-black w3-display-container">
+      <span onclick="document.getElementById('menu').style.display='none'" class="w3-button w3-display-topright w3-large">x</span>
+      <h1>Andres Quevedo</h1>
+    </div>
+    <div class="w3-container">
+      <ul>
+  		<li>Back End</li>
+  		<li>Front End</li>
+	</ul>
+    </div>
+    <div class="w3-container w3-black">
+      <h1>Mariano Franco</h1>
+    </div>
+   <div class="w3-container">
+      <ul>
+  		<li>Back End</li>
+  		<li>Front End</li>
+	</ul>
+    </div>
+    <div class="w3-container w3-black">
+      <h1>Carlos Delgado</h1>
+    </div>
+    <div class="w3-container">
+      <ul>
+  		<li>LISP</li>
+  		<li>Heurisitcas</li>
+	</ul>
+    </div>
+    <div class="w3-container w3-black">
+      <h1>Diego Hernández</h1>
+    </div>
+    <div class="w3-container">
+      <ul>
+  		<li>LISP</li>
+  		<li>Heurisitcas</li>
+	</ul>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
+
