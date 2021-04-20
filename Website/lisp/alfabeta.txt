@@ -1,4 +1,4 @@
-(defun abp(jug prof profActual  alfa beta tablero h) 
+(defun abp(jug prof profActual alfa beta tablero h) 
 	
 	(let ( (mov -1) (resp (if  (eq jug A) (* 10 minf) (* 10 inf))) (valorJugada 0))  
 	;;si alguien ya gana en esta posicion, regresamos al ganador
