@@ -17,7 +17,7 @@ nRows = 6
 nCols = 7
 
 canvasWidth = rad * 2 * nCols
-canvasHeight = rad * 2 * nCols + 80
+canvasHeight = rad * 2 * nCols + 180
 amount = [0, 0, 0, 0, 0, 0, 0]
 currentColor = [200, 0]
 
@@ -59,6 +59,7 @@ function draw() {
     winner = 1
     gameOver()
   }
+
   drawBoard()
 
   fill(turnColor)
@@ -161,8 +162,10 @@ function checkWin() {
 }
 
 function gameOver() {
-  textSize(32);
-  text('Game Over', 100, rad*2 + rad*2*7);
+  textSize(42);
+  //textFont(newFont);
+  fill(0);
+  text('Game Over', 240, rad*2 + rad*2*7);
 }
 
 function mouseClicked() {
