@@ -1,7 +1,7 @@
 // 0 red y 1 blue
 var xhttp = new XMLHttpRequest();
 
-rad = 25
+rad = 50
 turn = 0
 lastMove = [-1,-1]
 winner = 0
@@ -19,7 +19,7 @@ nCols = 7
 canvasWidth = rad * 2 * nCols
 canvasHeight = rad * 2 * nCols + 80
 amount = [0, 0, 0, 0, 0, 0, 0]
-currentColor = [255, 0]
+currentColor = [200, 0]
 
 grid = []
 matrizJuego = [] // String con 42 caracteres, Se divide en 7 partes, cada una una columna, el orden de elementos va de arriba hacia abajo
@@ -32,14 +32,28 @@ for (i = 0; i < nRows; i++) {
   grid.push(row)
 }
 
+var cnv;
+
+function centerCanvas() {
+  var x = (windowWidth - width) / 2;
+  var y = (windowHeight - height) / 2;
+  cnv.position(x, y);
+}
 
 function setup() {
-  createCanvas(canvasWidth, canvasHeight);
+  cnv = createCanvas(canvasWidth, canvasHeight);
+  centerCanvas();
+  background("#fffdf4");
+}
+
+function windowResized() {
+  centerCanvas();
 }
 
 function draw() {
-  background(0,0,0);
-  turnColor = color(currentColor[0], 0, currentColor[1])
+  background("#fffdf4");
+  turnColor = color("#ea5656")
+  // turnColor = color(currentColor[0], 0, currentColor[1])
 
   if(checkWin()) {
     winner = 1
@@ -55,22 +69,23 @@ function draw() {
 }
 
 function drawBoard() {
-  fillColor = color(255, 255, 255)
+  strokeWeight(3)
+  fillColor = color("#fffdf4")
 
   for (i = 0; i < nRows; i++) {
     for (j = 0; j < nCols; j++) {
       switch(grid[i][j]) {
         case -1:
-          fillColor = color(255, 255, 255)
+          fillColor = color("#fffdf4")
           break
         case 0:
-          fillColor = color(255, 0, 0)
+          fillColor = color("#ea5656")
           break
         case 1:
-          fillColor = color(0, 0, 255)
+          fillColor = color("#595be5")
           break
         case 2:
-          fillColor = color(0,255,0)
+          fillColor = color("#82d15e")
           break
         default:
           fillColor = color(128,128,128)
@@ -151,6 +166,10 @@ function gameOver() {
 }
 
 function mouseClicked() {
+  if(mouseX < -200 || mouseY < 20) {
+    return
+  }
+
   col = whichCol(mouseX);
   a = amount[col]
   if (a <= 5 && turn == fichaPlayer) {
