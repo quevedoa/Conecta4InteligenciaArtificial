@@ -10,9 +10,16 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname+'/index.html'));
 });
 
+var profundidad
+app.get('/setProfundidad', (req, res) => {
+    // profundidad = parseInt(req.query.prof)
+    console.log(req.query.prof)
+    profundidad = parseInt(req.query.prof)
+    res.sendFile(path.join(__dirname+'/index.html'));
+})
+
 app.get('/grid', (req, res) => {
     matrizJuego = String(req.query.lastMove)
-    profundidad = 4
     
     console.log(matrizJuego)
 
@@ -20,6 +27,7 @@ app.get('/grid', (req, res) => {
         //escribirlo en un txts
         
         var posicion = `(setq tablero ${matrizJuego})\n (setq rtrn (abp B ${profundidad} 0 minf inf tablero 1))\n (setq rtrn (list "heuristica:" (first rtrn) "columna:" (second rtrn)))\n (with-open-file (str "./lisp/resp.txt" \n         :direction :output \n         :if-exists :supersede \n         :if-does-not-exist :create) \n(format str (tostr rtrn)) \n)`
+        console.log(`Profundidad: ${profundidad}`)
         
         try {
             const data = fs.writeFileSync('./lisp/query.txt', posicion, { flag: 'w+' })
