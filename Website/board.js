@@ -1,7 +1,7 @@
 // 0 red y 1 blue
 var xhttp = new XMLHttpRequest();
 
-rad = 50
+rad = 30
 turn = 0
 lastMove = [-1,-1]
 winner = 0
@@ -165,11 +165,11 @@ function gameOver() {
   textSize(42);
   //textFont(newFont);
   fill(0);
-  text('Game Over', 240, rad*2 + rad*2*7);
+  text('Game Over', canvasWidth/4, rad*2 + rad*2*7);
 }
 
 function mouseClicked() {
-  if(mouseX < -200 || mouseY < 20) {
+  if(mouseX < -200 || mouseY < 20 || mouseX > canvasWidth) {
     return
   }
 
